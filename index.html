@@ -1,455 +1,713 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>แจกสคริปต์</title>
-<style>
-:root{
-  --white:#fff;
-  --black:#111;
-  --gray:#d9d9d9;
-  --gray2:#bcbcbc;
-  --red:#e53935;
-  --red2:#ff4d49;
-  --shadow:0 12px 32px rgba(0,0,0,.14);
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;width:100%;height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--black)}
-body{overflow:hidden;background:#fff}
-button,input,textarea{font:inherit}
-button{border:0;cursor:pointer}
-.app{width:100%;height:100%;position:relative}
-.screen{position:absolute;inset:0;display:none}
-.screen.active{display:flex}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เว็บเอาสคริป fling</title>
+  
+  <!-- External Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&family=Orbitron:wght@600;800;900&family=Fira+Code:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-/* HOME */
-#home{background:#fff;align-items:center;justify-content:center}
-.home-wrap{
-  width:min(92vw,620px);
-  text-align:center;
-  display:flex;flex-direction:column;align-items:center;gap:18px
-}
-.home-title{font-size:clamp(24px,6vw,38px);font-weight:800;line-height:1.2}
-.youtube-link{
-  display:inline-flex;align-items:center;gap:9px;color:#111;text-decoration:none;
-  font-size:18px;font-weight:700
-}
-.yt-icon{
-  width:34px;height:24px;border-radius:7px;background:#ff0000;display:grid;place-items:center;position:relative;
-  box-shadow:0 4px 10px rgba(255,0,0,.20)
-}
-.yt-icon:before{
-  content:"";width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:9px solid #fff;margin-left:2px
-}
-.plus{
-  position:absolute;left:50%;bottom:28px;transform:translateX(-50%);
-  width:74px;height:74px;border-radius:50%;background:#111;color:#fff;
-  font-size:42px;line-height:74px;box-shadow:var(--shadow)
-}
-.plus:active,.fab:active,.primary:active,.copy-btn:active{transform:scale(.96)}
-.account-fab{
-  position:absolute;right:18px;top:18px;width:52px;height:52px;border-radius:50%;
-  background:#ededed;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.12)
-}
-.account-fab img{width:100%;height:100%;object-fit:cover;display:block}
+  <style>
+    /* ==========================================================================
+       1. CORE DESIGN VARIABLES & SYSTEM SETUP
+       ========================================================================== */
+    :root {
+      /* Dark Crimson & Pitch Black Palette */
+      --bg-pitch-black: #030102;
+      --bg-dark-crimson: #0a0204;
+      --bg-card-glass: rgba(15, 3, 6, 0.82);
+      
+      --red-primary: #ff003c;
+      --red-bright: #ff1744;
+      --red-dark: #7a0016;
+      --red-deep-blood: #3d000b;
+      --red-glow: rgba(255, 0, 60, 0.6);
+      --red-glow-subtle: rgba(255, 0, 60, 0.15);
+      
+      --border-cyber: rgba(255, 23, 68, 0.4);
+      --border-cyber-bright: rgba(255, 0, 60, 0.9);
+      
+      --text-white: #ffffff;
+      --text-muted: #d1a3ac;
+      --text-code: #ff5277;
+      
+      /* UI Easing & Animations */
+      --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
 
-/* BUILDER */
-#builder{background:#bcbcbc;align-items:center;justify-content:center;padding:18px}
-.card{
-  width:min(94vw,680px);max-height:94vh;overflow:auto;background:#d0d0d0;padding:20px;
-  box-shadow:var(--shadow);border:1px solid #adadad
-}
-.card h2{margin:0 0 14px;font-size:24px}
-.label{font-size:16px;font-weight:800;margin:14px 0 7px;display:block}
-.field{
-  width:100%;border:2px solid #8f8f8f;background:#efefef;border-radius:0;padding:13px 14px;
-  outline:none;color:#111
-}
-.field:focus{border-color:#333}
-textarea.field{height:160px;resize:vertical;min-height:120px}
-.small-note{font-size:13px;color:#333;margin-top:7px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.primary{
-  width:100%;padding:15px;background:#111;color:#fff;margin-top:18px;font-weight:800
-}
-.back-btn{
-  background:transparent;color:#111;padding:5px 0;font-weight:700;margin-bottom:6px
-}
-.link-box{
-  margin-top:14px;background:#ececec;border:2px solid #8f8f8f;padding:11px;display:flex;gap:8px;align-items:center
-}
-.link-value{flex:1;overflow:auto;white-space:nowrap;font-size:13px}
-.copy-mini{background:#111;color:#fff;padding:9px 12px}
+    /* ==========================================================================
+       2. GLOBAL RESET & BASE STYLES
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
 
-/* RESULT / GENERATED SHARE PAGE */
-#share{background:#fff;align-items:center;justify-content:center}
-.share-wrap{width:min(94vw,700px)}
-.share-user{display:flex;align-items:center;gap:12px;margin-bottom:18px}
-.avatar{width:48px;height:48px;border-radius:50%;background:#bcbcbc;object-fit:cover}
-.username{font-weight:800;font-size:18px}
-.script-card{
-  border:2px solid #d4d4d4;background:#fff;box-shadow:0 10px 24px rgba(0,0,0,.08)
-}
-.script-card-head{padding:15px 16px;border-bottom:2px solid #eee;font-weight:800;font-size:22px}
-.timer-zone{padding:18px}
-.timer{
-  min-height:170px;border:2px solid #999;background:#eee;display:grid;place-items:center;
-  text-align:center;padding:20px
-}
-.timer-number{font-size:48px;font-weight:900}
-.timer-text{margin-top:7px;font-size:15px}
-.action-row{display:flex;gap:10px;margin-top:12px}
-.action-btn{flex:1;padding:14px;font-weight:800}
-.get-btn{background:#111;color:#fff}
-.copy-btn{background:var(--red);color:#fff}
-.copy-btn:hover{background:var(--red2)}
-.script-output{display:none}
-.script-output.open{display:block}
-.script-output textarea{
-  width:100%;height:220px;border:0;outline:0;resize:none;padding:14px;background:#fff;color:#111
-}
-.direct-copy{
-  background:var(--red);color:#fff;padding:10px 14px;position:absolute;right:8px;top:8px;font-weight:900
-}
-.output-wrap{position:relative}
-.meta-url{font-size:12px;color:#666;margin-top:10px;word-break:break-all}
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg-pitch-black);
+      font-family: 'Kanit', sans-serif;
+      color: var(--text-white);
+    }
 
-/* ACCOUNT */
-.modal{
-  position:absolute;inset:0;background:rgba(0,0,0,.28);display:none;align-items:flex-end;justify-content:center
-}
-.modal.open{display:flex}
-.sheet{
-  width:100%;max-width:680px;background:#fff;padding:18px 18px 28px;border-radius:22px 22px 0 0;
-  box-shadow:0 -12px 35px rgba(0,0,0,.18)
-}
-.sheet h3{margin:0 0 14px}
-.profile-line{display:flex;align-items:center;gap:14px}
-.profile-preview{width:74px;height:74px;border-radius:50%;background:#bcbcbc;object-fit:cover;border:2px solid #ddd}
-.file-label{display:inline-block;background:#111;color:#fff;padding:11px 14px;font-weight:800}
-.close{background:#eee;color:#111;padding:10px 14px}
-.sheet .actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
-.name-input{flex:1;min-width:180px}
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      background: radial-gradient(circle at center, #140206 0%, #030102 100%);
+    }
 
-/* TOAST */
-#toast{
-  position:absolute;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);
-  background:#111;color:#fff;padding:11px 16px;opacity:0;pointer-events:none;transition:.22s;
-  font-size:14px;z-index:1000
-}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-@media(max-width:520px){
-  .row{grid-template-columns:1fr}
-  .card{padding:16px}
-  .timer{min-height:145px}
-}
-</style>
+    /* Custom Scrollbar for Code View */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(10, 2, 4, 0.8);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--red-dark);
+      border-radius: 4px;
+      border: 1px solid var(--red-primary);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--red-primary);
+    }
+
+    /* ==========================================================================
+       3. BACKGROUND CANVAS & HUD AMBIENT EFFECTS
+       ========================================================================== */
+    #particle-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Cyber Scanline Overlay */
+    .scanlines {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+      background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.35) 50%
+      );
+      background-size: 100% 4px;
+      opacity: 0.6;
+    }
+
+    /* Ambient Crimson Fog */
+    .ambient-glow {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      filter: blur(140px);
+      z-index: 1;
+      pointer-events: none;
+      animation: ambientPulse 8s ease-in-out infinite alternate;
+    }
+    .glow-left {
+      top: -100px;
+      left: -100px;
+      background: rgba(255, 0, 60, 0.22);
+    }
+    .glow-right {
+      bottom: -100px;
+      right: -100px;
+      background: rgba(122, 0, 22, 0.3);
+    }
+
+    @keyframes ambientPulse {
+      0% { transform: scale(1) translate(0, 0); opacity: 0.7; }
+      100% { transform: scale(1.15) translate(30px, -20px); opacity: 1; }
+    }
+
+    /* ==========================================================================
+       4. CYBER HUD MAIN CONTAINER CARD
+       ========================================================================== */
+    .cyber-hud-card {
+      position: relative;
+      z-index: 10;
+      width: 92%;
+      max-width: 490px;
+      background: var(--bg-card-glass);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid var(--border-cyber);
+      border-radius: 20px;
+      padding: 40px 32px;
+      box-shadow: 
+        0 25px 60px rgba(0, 0, 0, 0.95),
+        0 0 40px rgba(255, 0, 60, 0.25),
+        inset 0 0 15px rgba(255, 0, 60, 0.1);
+      text-align: center;
+      transition: var(--transition-smooth);
+      animation: cardSpawn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes cardSpawn {
+      0% { opacity: 0; transform: scale(0.9) translateY(30px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* Sci-Fi Corner Brackets */
+    .cyber-corner {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-color: var(--red-bright);
+      border-style: solid;
+      pointer-events: none;
+      filter: drop-shadow(0 0 4px var(--red-primary));
+    }
+    .corner-tl { top: -2px; left: -2px; border-width: 3px 0 0 3px; border-top-left-radius: 6px; }
+    .corner-tr { top: -2px; right: -2px; border-width: 3px 3px 0 0; border-top-right-radius: 6px; }
+    .corner-bl { bottom: -2px; left: -2px; border-width: 0 0 3px 3px; border-bottom-left-radius: 6px; }
+    .corner-br { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; border-bottom-right-radius: 6px; }
+
+    /* Decorative Tech Lines */
+    .tech-header-line {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, var(--red-bright) 50%, transparent 100%);
+      margin-bottom: 25px;
+      opacity: 0.8;
+      box-shadow: 0 0 8px var(--red-primary);
+    }
+
+    /* ==========================================================================
+       5. TITLE STYLING
+       ========================================================================== */
+    .ui-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #ffffff 0%, #ff6b8b 50%, #ff003c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      text-shadow: 0 0 20px var(--red-glow);
+    }
+
+    .ui-title i {
+      -webkit-text-fill-color: var(--red-bright);
+      filter: drop-shadow(0 0 8px var(--red-primary));
+      animation: iconGlow 2s infinite alternate;
+    }
+
+    @keyframes iconGlow {
+      0% { filter: drop-shadow(0 0 5px var(--red-primary)); }
+      100% { filter: drop-shadow(0 0 15px var(--red-bright)); }
+    }
+
+    /* ==========================================================================
+       6. STEPS ANIMATION & DISPLAY CONTROL
+       ========================================================================== */
+    .step {
+      display: none;
+      opacity: 0;
+      transform: translateY(15px) scale(0.98);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .step.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* ==========================================================================
+       7. BUTTONS (NEON CYBER BUTTONS)
+       ========================================================================== */
+    .btn-wrapper {
+      position: relative;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .btn {
+      position: relative;
+      width: 100%;
+      padding: 18px 28px;
+      border: 1px solid var(--border-cyber-bright);
+      border-radius: 12px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text-white);
+      background: linear-gradient(135deg, rgba(255, 0, 60, 0.85) 0%, rgba(122, 0, 22, 0.95) 100%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      overflow: hidden;
+      box-shadow: 
+        0 10px 30px rgba(255, 0, 60, 0.4),
+        inset 0 0 15px rgba(255, 255, 255, 0.2);
+      transition: var(--transition-bounce);
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.35), 
+        transparent
+      );
+      transition: 0.6s ease;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 
+        0 15px 40px rgba(255, 0, 60, 0.7),
+        0 0 20px rgba(255, 23, 68, 0.8);
+      border-color: #ffffff;
+    }
+
+    .btn:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 5px 15px rgba(255, 0, 60, 0.4);
+    }
+
+    /* ==========================================================================
+       8. STEP 2: TIMER HUD DESIGN
+       ========================================================================== */
+    .timer-container {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      margin: 15px auto 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .timer-svg {
+      transform: rotate(-90deg);
+      filter: drop-shadow(0 0 12px var(--red-glow));
+    }
+
+    .timer-bg-circle {
+      stroke: rgba(255, 0, 60, 0.12);
+      stroke-width: 8;
+      fill: transparent;
+    }
+
+    .timer-progress-circle {
+      stroke: url(#cyber-red-gradient);
+      stroke-width: 8;
+      fill: transparent;
+      stroke-dasharray: 408.4; /* 2 * PI * 65 */
+      stroke-dashoffset: 0;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s linear;
+    }
+
+    .timer-number {
+      position: absolute;
+      font-family: 'Orbitron', 'Kanit', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: #ffffff;
+      text-shadow: 
+        0 0 10px var(--red-primary),
+        0 0 20px var(--red-bright),
+        0 0 30px var(--red-dark);
+    }
+
+    /* HUD Tech Rotating Outer Ring */
+    .hud-outer-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 1px dashed rgba(255, 0, 60, 0.4);
+      border-radius: 50%;
+      animation: hudRotate 12s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes hudRotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* ==========================================================================
+       9. STEP 3: SCRIPT CONTAINER DESIGN
+       ========================================================================== */
+    .script-box {
+      position: relative;
+      background: rgba(5, 1, 2, 0.92);
+      border: 1px solid var(--border-cyber);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 25px;
+      text-align: left;
+      box-shadow: 
+        inset 0 0 20px rgba(0, 0, 0, 0.9),
+        0 0 15px rgba(255, 0, 60, 0.15);
+      transition: var(--transition-fast);
+    }
+
+    .script-box:hover {
+      border-color: var(--red-bright);
+      box-shadow: 
+        inset 0 0 20px rgba(0, 0, 0, 0.9),
+        0 0 20px rgba(255, 0, 60, 0.3);
+    }
+
+    .script-text-code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-code);
+      line-height: 1.5;
+      word-break: break-all;
+      max-height: 110px;
+      overflow-y: auto;
+      text-shadow: 0 0 8px rgba(255, 82, 119, 0.4);
+    }
+  </style>
 </head>
 <body>
-<div class="app">
 
-  <section id="home" class="screen active">
-    <div class="home-wrap">
-      <div class="home-title">เข้ามาทางลิงค์โดยตรงหรือกดปุ่มบวกเพื่อสร้างเว็บแจกสคริปของตนเอง</div>
-      <a class="youtube-link" href="https://www.youtube.com/@BHK2Mambo" target="_blank" rel="noopener">
-        <span class="yt-icon"></span><span>YouTube:BHK2 Mambo</span>
-      </a>
-    </div>
-    <button class="account-fab" id="openAccount" aria-label="บัญชี">
-      <img id="homeAvatar" alt="โปรไฟล์">
-    </button>
-    <button class="plus" id="openBuilder" aria-label="สร้างเว็บ">+</button>
-  </section>
+  <!-- Background Particle Canvas & Scanlines -->
+  <canvas id="particle-canvas"></canvas>
+  <div class="scanlines"></div>
 
-  <section id="builder" class="screen">
-    <div class="card">
-      <button class="back-btn" id="backHome">← กลับหน้าแรก</button>
-      <h2>สร้างเว็บแจกสคริป</h2>
+  <!-- Red Ambient Glows -->
+  <div class="ambient-glow glow-left"></div>
+  <div class="ambient-glow glow-right"></div>
 
-      <label class="label">ชื่อสคริป</label>
-      <input id="scriptName" class="field" type="text" autocomplete="off">
+  <!-- Main Cyber HUD Card -->
+  <div class="cyber-hud-card">
+    
+    <!-- Sci-Fi Corner Brackets -->
+    <div class="cyber-corner corner-tl"></div>
+    <div class="cyber-corner corner-tr"></div>
+    <div class="cyber-corner corner-bl"></div>
+    <div class="cyber-corner corner-br"></div>
 
-      <label class="label">เมื่อรอครบ 5 วิแล้วจะได้สคริปต์อะไร</label>
-      <textarea id="scriptCode" class="field"></textarea>
+    <!-- UI Title -->
+    <h1 class="ui-title">
+      <i class="fa-solid fa-terminal"></i>
+      เว็บเอาสคริป fling
+    </h1>
 
-      <div class="row">
-        <div>
-          <label class="label">เวลารอ (วินาที)</label>
-          <input id="waitSeconds" class="field" type="number" min="1" value="5">
-        </div>
-        <div>
-          <label class="label">ชนิดลิงก์</label>
-          <input class="field" type="text" value="ใช้ลิงก์เว็บปัจจุบัน" disabled>
-        </div>
-      </div>
+    <div class="tech-header-line"></div>
 
-      <button class="primary" id="createPage">สร้างเว็บแจกสคริป</button>
-
-      <div id="generatedBox" class="link-box" style="display:none">
-        <div class="link-value" id="generatedLink"></div>
-        <button class="copy-mini" id="copyGenerated">Copy</button>
-      </div>
-      <div class="small-note">ระบบจะสร้างรหัสเฉพาะให้กับหน้านี้ และบันทึกข้อมูลไว้ในเครื่องนี้ด้วย</div>
-    </div>
-  </section>
-
-  <section id="share" class="screen">
-    <div class="share-wrap">
-      <div class="share-user">
-        <img class="avatar" id="shareAvatar" alt="โปรไฟล์">
-        <div>
-          <div class="username" id="shareUsername"></div>
-          <div style="font-size:13px;color:#777">เว็บแจกสคริป</div>
-        </div>
-      </div>
-
-      <div class="script-card">
-        <div class="script-card-head" id="shareTitle"></div>
-        <div class="timer-zone">
-          <div class="timer" id="timerBox">
-            <div>
-              <div class="timer-number" id="timerNumber">5</div>
-              <div class="timer-text">รอให้ครบเวลา แล้วกด “เอา script”</div>
-            </div>
-          </div>
-          <div class="action-row">
-            <button class="action-btn get-btn" id="getScriptBtn">เอา script</button>
-            <button class="action-btn copy-btn" id="copyScriptBtn">Copy</button>
-          </div>
-          <div class="script-output" id="scriptOutput">
-            <div class="output-wrap">
-              <button class="direct-copy" id="directCopy">Copy</button>
-              <textarea id="outputCode" readonly></textarea>
-            </div>
-          </div>
-          <div class="meta-url" id="shareUrl"></div>
-        </div>
+    <!-- Step 1: หน้าแรกก่อนกดนับเวลา -->
+    <div id="step-1" class="step active">
+      <div class="btn-wrapper">
+        <button class=btn" onclick="startCountdown()">
+          <i class="fa-solid fa-code"></i> เอาสคริป
+        </button>
       </div>
     </div>
-  </section>
 
-  <div class="modal" id="accountModal">
-    <div class="sheet">
-      <h3>บัญชี</h3>
-      <div class="profile-line">
-        <img id="profilePreview" class="profile-preview" alt="โปรไฟล์">
-        <div style="flex:1">
-          <div style="font-weight:800;margin-bottom:7px">ชื่อ</div>
-          <input id="displayName" class="field name-input" type="text" autocomplete="off">
-          <div style="margin-top:10px">
-            <label class="file-label" for="avatarFile">เลือกรูปจากแกลอรี่</label>
-            <input id="avatarFile" type="file" accept="image/*" hidden>
-          </div>
-        </div>
-      </div>
-      <div class="actions">
-        <button class="primary" id="saveAccount" style="margin-top:0">บันทึก</button>
-        <button class="close" id="closeAccount">ปิด</button>
-        <button class="close" id="randomName">สุ่มชื่อใหม่</button>
+    <!-- Step 2: หน้านับถอยหลัง 10 วินาที -->
+    <div id="step-2" class="step">
+      <div class="timer-container">
+        <div class="hud-outer-ring"></div>
+        <svg class="timer-svg" width="150" height="150">
+          <circle class="timer-bg-circle" r="65" cx="75" cy="75"/>
+          <circle id="timer-progress" class="timer-progress-circle" r="65" cx="75" cy="75"/>
+          <defs>
+            <linearGradient id="cyber-red-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ff1744" />
+              <stop offset="100%" stop-color="#ff003c" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <span id="countdown-num" class="timer-number">10</span>
       </div>
     </div>
+
+    <!-- Step 3: หน้าแสดงสคริปต์และปุ่มคัดลอก -->
+    <div id="step-3" class="step">
+      <div class="script-box">
+        <div id="script-text" class="script-text-code"> loadstring(game:HttpGet("https://raw.githubusercontent.com/Kiro-Mamdo/fling/refs/heads/main/fling.v1.1"))() </div>
+      </div>
+      <div class="btn-wrapper">
+        <button class="btn" onclick="copyScriptToClipboard()">
+          <i class="fa-solid fa-copy"></i> คัดลอกสคริป
+        </button>
+      </div>
+    </div>
+
   </div>
 
-  <div id="toast"></div>
-</div>
-
-<script>
-(() => {
-  const DEFAULT_AVATAR = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-    <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
-      <rect width="200" height="200" fill="#bcbcbc"/>
-      <circle cx="100" cy="76" r="42" fill="#777"/>
-      <path d="M30 185c9-48 37-70 70-70s61 22 70 70" fill="#777"/>
-    </svg>
-  `);
-
-  const names = [
-    'ShadowFox','PixelBoy','BHKPlayer','ScriptKid','NightCore','MamboX',
-    'RedWolf','BlueGhost','DarkByte','MoonDev','ZeroX','NeoPlayer',
-    'KiroX','FireByte','GhostDev','AlphaX','Nova','RexDev','ByteZ','LunaX'
-  ];
-
-  const $ = id => document.getElementById(id);
-  const state = {
-    username: localStorage.getItem('sc_username') || names[Math.floor(Math.random()*names.length)],
-    avatar: localStorage.getItem('sc_avatar') || DEFAULT_AVATAR
-  };
-
-  function saveProfile(){
-    localStorage.setItem('sc_username', state.username);
-    localStorage.setItem('sc_avatar', state.avatar);
-  }
-
-  function refreshProfileUI(){
-    $('homeAvatar').src = state.avatar;
-    $('profilePreview').src = state.avatar;
-    $('displayName').value = state.username;
-  }
-  refreshProfileUI();
-  saveProfile();
-
-  function showScreen(id){
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    $(id).classList.add('active');
-  }
-
-  function toast(msg){
-    const t=$('toast');
-    t.textContent=msg; t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'),1700);
-  }
-
-  function randomCode(len=12){
-    const chars='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
-    const arr=new Uint32Array(len);
-    crypto.getRandomValues(arr);
-    let s='';
-    for(let i=0;i<len;i++) s += chars[arr[i]%chars.length];
-    return s;
-  }
-
-  function currentBaseUrl(){
-    return location.href.split('#')[0].split('?')[0];
-  }
-
-  function makeShareUrl(id){
-    return currentBaseUrl() + '#script=' + encodeURIComponent(id);
-  }
-
-  function loadPages(){
-    try { return JSON.parse(localStorage.getItem('sc_pages') || '{}'); }
-    catch(e){ return {}; }
-  }
-  function savePages(p){ localStorage.setItem('sc_pages', JSON.stringify(p)); }
-
-  function createPageData(){
-    const name = $('scriptName').value.trim();
-    const code = $('scriptCode').value;
-    const wait = Math.max(1, Math.min(3600, Number($('waitSeconds').value)||5));
-    if(!name){ toast('กรุณาใส่ชื่อสคริป'); return null; }
-    if(!code.trim()){ toast('กรุณาใส่สคริปต์'); return null; }
-
-    const pages=loadPages();
-    let id;
-    do { id = randomCode(14) } while(pages[id]);
-    pages[id]={
-      id,name,code,wait,username:state.username,avatar:state.avatar,
-      createdAt:Date.now()
-    };
-    savePages(pages);
-    return pages[id];
-  }
-
-  function renderShare(data){
-    showScreen('share');
-    $('shareTitle').textContent = data.name;
-    $('shareUsername').textContent = data.username;
-    $('shareAvatar').src = data.avatar || DEFAULT_AVATAR;
-    $('shareUrl').textContent = makeShareUrl(data.id);
-    $('scriptOutput').classList.remove('open');
-    $('outputCode').value = '';
-    $('timerNumber').textContent = String(data.wait);
-    $('getScriptBtn').disabled = false;
-    $('getScriptBtn').style.opacity = '1';
-
-    let remaining=data.wait;
-    let timerId=null;
-    const tick=()=>{
-      $('timerNumber').textContent=String(remaining);
-      if(remaining<=0){
-        clearInterval(timerId);
-        $('timerNumber').textContent='✓';
-        $('getScriptBtn').disabled=false;
-        $('getScriptBtn').style.opacity='1';
-        $('getScriptBtn').dataset.ready='1';
-      }else{
-        remaining--;
+  <script>
+    /* ==========================================================================
+       1. WEB AUDIO API SYNTHESIZER (CYBER SFX GENERATOR)
+       ========================================================================== */
+    class CyberAudioSFX {
+      constructor() {
+        this.ctx = null;
       }
-    };
-    $('getScriptBtn').dataset.ready='0';
-    $('getScriptBtn').onclick=()=>{
-      if($('getScriptBtn').dataset.ready!=='1'){ toast('กรุณารอให้ครบเวลา'); return; }
-      $('outputCode').value=data.code;
-      $('scriptOutput').classList.add('open');
-      toast('แสดงสคริปต์แล้ว');
-    };
 
-    timerId=setInterval(tick,1000);
-    tick();
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContext();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
 
-    const copyFn=async()=>{
-      const txt=$('outputCode').value;
-      if(!txt){ toast('กดเอา script ก่อน'); return; }
-      try{
-        await navigator.clipboard.writeText(txt);
-        toast('คัดลอก script แล้ว');
-      }catch(e){
-        $('outputCode').select();
+      playClickSFX() {
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(440, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.08);
+        
+        gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+        
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.08);
+      }
+
+      playTickSFX() {
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(400, this.ctx.currentTime + 0.05);
+        
+        gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.05);
+        
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.05);
+      }
+
+      playSuccessSFX() {
+        this.init();
+        const now = this.ctx.currentTime;
+        
+        const osc1 = this.ctx.createOscillator();
+        const osc2 = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        
+        osc1.type = 'sine';
+        osc2.type = 'triangle';
+        
+        osc1.frequency.setValueAtTime(523.25, now); // C5
+        osc1.frequency.setValueAtTime(659.25, now + 0.08); // E5
+        osc1.frequency.setValueAtTime(783.99, now + 0.16); // G5
+        osc1.frequency.setValueAtTime(1046.50, now + 0.24); // C6
+        
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+        
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(this.ctx.destination);
+        
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + 0.45);
+        osc2.stop(now + 0.45);
+      }
+    }
+
+    const sfx = new CyberAudioSFX();
+
+    /* ==========================================================================
+       2. INTERACTIVE PARTICLE CANVAS SYSTEM
+       ========================================================================== */
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let particles = [];
+    const particleCount = 45;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.8;
+        this.vy = (Math.random() - 0.5) * 0.8;
+        this.radius = Math.random() * 2 + 1;
+        this.alpha = Math.random() * 0.6 + 0.2;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 23, 68, ${this.alpha})`;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = '#ff003c';
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Connect near particles with lines
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 120) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(255, 0, 60, ${0.25 * (1 - dist / 120)})`;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
+      }
+
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    /* ==========================================================================
+       3. TIMER & STEP CONTROLLER
+       ========================================================================== */
+    const totalTime = 10;
+    let timeLeft = totalTime;
+    let countdownInterval;
+
+    const circle = document.getElementById('timer-progress');
+    const radius = circle.r.baseVal.value;
+    const circumference = 2 * Math.PI * radius; // 408.4
+
+    circle.style.strokeDasharray = `${circumference} ${circumference}`;
+
+    function setProgress(percent) {
+      const offset = circumference - (percent / 100) * circumference;
+      circle.style.strokeDashoffset = offset;
+    }
+
+    function startCountdown() {
+      sfx.playClickSFX();
+
+      document.getElementById('step-1').classList.remove('active');
+      
+      setTimeout(() => {
+        document.getElementById('step-2').classList.add('active');
+      }, 150);
+
+      timeLeft = totalTime;
+      setProgress(100);
+
+      countdownInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('countdown-num').innerText = timeLeft;
+        sfx.playTickSFX();
+
+        const percent = (timeLeft / totalTime) * 100;
+        setProgress(percent);
+
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          sfx.playSuccessSFX();
+
+          document.getElementById('step-2').classList.remove('active');
+          setTimeout(() => {
+            document.getElementById('step-3').classList.add('active');
+          }, 150);
+        }
+      }, 1000);
+    }
+
+    function copyScriptToClipboard() {
+      sfx.playSuccessSFX();
+      const scriptText = document.getElementById('script-text').innerText;
+
+      navigator.clipboard.writeText(scriptText).catch(err => {
+        const tempInput = document.createElement('textarea');
+        tempInput.value = scriptText;
+        document.body.appendChild(tempInput);
+        tempInput.select();
         document.execCommand('copy');
-        toast('คัดลอก script แล้ว');
-      }
-    };
-    $('copyScriptBtn').onclick=copyFn;
-    $('directCopy').onclick=copyFn;
-  }
-
-  // Buttons
-  $('openBuilder').onclick=()=>showScreen('builder');
-  $('backHome').onclick=()=>showScreen('home');
-  $('createPage').onclick=()=>{
-    const data=createPageData();
-    if(!data) return;
-    const url=makeShareUrl(data.id);
-    $('generatedBox').style.display='flex';
-    $('generatedLink').textContent=url;
-    history.replaceState(null,'',url);
-    toast('สร้างเว็บแจกสคริปสำเร็จ');
-  };
-  $('copyGenerated').onclick=async()=>{
-    const txt=$('generatedLink').textContent;
-    try{await navigator.clipboard.writeText(txt)}catch(e){
-      const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();
+        document.body.removeChild(tempInput);
+      });
     }
-    toast('คัดลอกลิงก์แล้ว');
-  };
-
-  // Account
-  $('openAccount').onclick=()=>{ refreshProfileUI(); $('accountModal').classList.add('open'); };
-  $('closeAccount').onclick=()=>$('accountModal').classList.remove('open');
-  $('randomName').onclick=()=>{
-    state.username = names[Math.floor(Math.random()*names.length)] + Math.floor(Math.random()*100);
-    refreshProfileUI();
-    toast('สุ่มชื่อใหม่แล้ว');
-  };
-  $('saveAccount').onclick=()=>{
-    const n=$('displayName').value.trim();
-    if(n) state.username=n;
-    saveProfile(); refreshProfileUI(); $('accountModal').classList.remove('open');
-    toast('บันทึกโปรไฟล์แล้ว');
-  };
-  $('avatarFile').onchange=(e)=>{
-    const file=e.target.files?.[0];
-    if(!file) return;
-    const reader=new FileReader();
-    reader.onload=()=>{ state.avatar=reader.result; refreshProfileUI(); };
-    reader.readAsDataURL(file);
-  };
-
-  // Open direct share URL: #script=ID
-  function boot(){
-    const hash=location.hash;
-    const m=hash.match(/script=([^&]+)/);
-    if(m){
-      const id=decodeURIComponent(m[1]);
-      const pages=loadPages();
-      const data=pages[id];
-      if(data){ renderShare(data); return; }
-      toast('ไม่พบเว็บแจกสคริปนี้ในเครื่องนี้');
-    }
-  }
-  boot();
-})();
-</script>
+  </script>
 </body>
-</html>
+  </html>
